@@ -88,6 +88,21 @@ public class Appointment {
         this.status = AppointmentStatus.CANCELLED;
     }
 
+    /** Check-in at the reception: only a still-scheduled appointment, and only on its own day. */
+    public boolean canConfirmArrival(LocalDateTime now) {
+        return status == AppointmentStatus.SCHEDULED && scheduledAt.toLocalDate().equals(now.toLocalDate());
+    }
+
+    public void confirmArrival(LocalDateTime now) {
+        if (status != AppointmentStatus.SCHEDULED) {
+            throw new BusinessException("Só é possível confirmar a chegada de consultas com status Agendada.");
+        }
+        if (!canConfirmArrival(now)) {
+            throw new BusinessException("A chegada só pode ser confirmada no dia da consulta.");
+        }
+        this.status = AppointmentStatus.CONFIRMED;
+    }
+
     /** The doctor can only record the outcome once the appointment time has arrived. */
     public boolean canRecordOutcome(LocalDateTime now) {
         return isActive() && !scheduledAt.isAfter(now);

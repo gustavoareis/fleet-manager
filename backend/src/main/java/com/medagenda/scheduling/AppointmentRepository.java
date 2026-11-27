@@ -66,4 +66,43 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
             """)
     Page<Appointment> findHistoryByPatient(Long patientId, LocalDateTime now,
                                           Collection<AppointmentStatus> activeStatuses, Pageable pageable);
+
+    /** Reception list: every doctor's appointments in [from, to); doctorId = null means all doctors. */
+    @EntityGraph(attributePaths = {"patient", "patient.healthInsurance", "doctor", "doctor.specialty"})
+    @Query(value = """
+            select a from Appointment a
+            where a.scheduledAt >= :from and a.scheduledAt < :to
+              and (:doctorId is null or a.doctor.id = :doctorId)
+            """,
+            countQuery = """
+            select count(a) from Appointment a
+            where a.scheduledAt >= :from and a.scheduledAt < :to
+              and (:doctorId is null or a.doctor.id = :doctorId)
+            """)
+    Page<Appointment> findForReception(LocalDateTime from, LocalDateTime to, Long doctorId, Pageable pageable);
+
+    /** Appointments per status in [from, to): one grouped query instead of one count per status. */
+    @Query("""
+            select a.status, count(a) from Appointment a
+            where a.scheduledAt >= :from and a.scheduledAt < :to
+            group by a.status
+            """)
+    List<Object[]> countByStatus(LocalDateTime from, LocalDateTime to);
+
+    /** One row per doctor with the outcome counters, for the report. */
+    @Query("""
+            select new com.medagenda.admin.report.DoctorReportRow(
+                d.name, s.name,
+                count(a),
+                count(case when a.status = com.medagenda.scheduling.AppointmentStatus.COMPLETED then 1 end),
+                count(case when a.status = com.medagenda.scheduling.AppointmentStatus.NO_SHOW then 1 end),
+                count(case when a.status = com.medagenda.scheduling.AppointmentStatus.CANCELLED then 1 end))
+            from Appointment a
+            join a.doctor d
+            join d.specialty s
+            where a.scheduledAt >= :from and a.scheduledAt < :to
+            group by d.id, d.name, s.name
+            order by count(a) desc, d.name
+            """)
+    List<com.medagenda.admin.report.DoctorReportRow> reportByDoctor(LocalDateTime from, LocalDateTime to);
 }

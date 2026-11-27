@@ -25,6 +25,25 @@ spring:
   web:
     locale: pt_BR
     locale-resolver: fixed
+  # Legacy admin module: controllers return a view name, resolved to /WEB-INF/jsp/<name>.jsp.
+  # Files under WEB-INF cannot be requested directly by a browser, only rendered by a controller.
+  mvc:
+    view:
+      prefix: /WEB-INF/jsp/
+      suffix: .jsp
+
+server:
+  servlet:
+    session:
+      # Only the JSP admin module uses a session (the REST API is stateless)
+      timeout: 30m
+      # Cookie only: URL rewriting would append ";jsessionid=..." to links, which Spring Security's
+      # firewall rejects (and which leaks the session id in logs and referrers)
+      tracking-modes: cookie
+      cookie:
+        http-only: true
+        same-site: lax
+        secure: ${SESSION_COOKIE_SECURE:false}
 
 medagenda:
   scheduling:
@@ -44,6 +63,8 @@ medagenda:
       allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:4200}
 
 springdoc:
+  # Document only the REST API; the JSP admin pages are not part of it
+  paths-to-match: /api/**
   swagger-ui:
     path: /swagger-ui.html
     tags-sorter: alpha
