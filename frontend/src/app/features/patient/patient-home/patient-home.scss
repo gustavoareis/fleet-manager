@@ -4,12 +4,36 @@
   gap: 16px;
 }
 
-mat-card-content {
-  padding-top: 8px;
+mat-card {
+  display: flex;
+  flex-direction: column;
 }
 
-.soon mat-card-subtitle {
-  color: var(--mat-sys-tertiary);
+mat-card-content {
+  padding-top: 8px;
+  flex: 1;
+}
+
+mat-card-actions {
+  padding: 8px 16px 16px;
+}
+
+.highlight {
+  border-color: var(--mat-sys-primary);
+}
+
+.next-when {
+  font: var(--mat-sys-title-medium);
+  color: var(--mat-sys-primary);
+  margin-bottom: 4px;
+
+  &::first-letter {
+    text-transform: uppercase;
+  }
+}
+
+.muted {
+  color: var(--mat-sys-on-surface-variant);
 }
 
 dl {

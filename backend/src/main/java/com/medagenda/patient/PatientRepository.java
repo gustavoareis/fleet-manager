@@ -13,7 +13,7 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
     @EntityGraph(attributePaths = {"healthInsurance", "user"})
     @Query("""
             select p from Patient p
-            where lower(p.name) like :namePattern
+            where lower(function('unaccent', p.name)) like :namePattern
               and p.cpf like :cpfPrefix
             """)
     Page<Patient> search(String namePattern, String cpfPrefix, Pageable pageable);

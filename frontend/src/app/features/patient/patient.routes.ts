@@ -7,4 +7,16 @@ export const PATIENT_ROUTES: Routes = [
     title: 'Início · MedAgenda',
     loadComponent: () => import('./patient-home/patient-home').then((m) => m.PatientHome),
   },
+  {
+    path: 'agendar',
+    title: 'Agendar consulta · MedAgenda',
+    loadComponent: () =>
+      import('./scheduling/book-appointment/book-appointment').then((m) => m.BookAppointment),
+  },
+  {
+    path: 'consultas',
+    title: 'Minhas consultas · MedAgenda',
+    loadComponent: () =>
+      import('./scheduling/my-appointments/my-appointments').then((m) => m.MyAppointments),
+  },
 ];

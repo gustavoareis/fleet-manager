@@ -1,0 +1,90 @@
+<section class="page">
+  <div class="header">
+    <div>
+      <h1>Minhas consultas</h1>
+      <p class="page-subtitle">Acompanhe seus agendamentos e o histórico de atendimentos.</p>
+    </div>
+    <a mat-flat-button routerLink="/paciente/agendar">
+      <mat-icon aria-hidden="true">add</mat-icon>
+      Agendar consulta
+    </a>
+  </div>
+
+  <mat-tab-group
+    [selectedIndex]="scope() === 'UPCOMING' ? 0 : 1"
+    (selectedIndexChange)="changeTab($event)"
+    mat-stretch-tabs="false"
+  >
+    <mat-tab label="Próximas" />
+    <mat-tab label="Histórico" />
+  </mat-tab-group>
+
+  @if (appointments.isLoading()) {
+    <mat-progress-bar mode="indeterminate" aria-label="Carregando consultas" />
+  }
+
+  @if (appointments.error()) {
+    <p class="form-error" role="alert">Não foi possível carregar suas consultas.</p>
+  } @else if (appointments.value(); as page) {
+    <ul class="list" [attr.aria-busy]="appointments.isLoading()">
+      @for (appointment of page.content; track appointment.id) {
+        @let when = asDate(appointment.scheduledAt);
+        <li>
+          <mat-card appearance="outlined" class="item">
+            <div class="date" aria-hidden="true">
+              <span class="day">{{ when | date: 'dd' }}</span>
+              <span class="month">{{ when | date: 'MMM' }}</span>
+            </div>
+            <div class="info">
+              <h2 class="title">{{ appointment.doctor.name }}</h2>
+              <p class="meta">{{ appointment.doctor.specialty }}</p>
+              <p class="meta">
+                <mat-icon aria-hidden="true">schedule</mat-icon>
+                <span class="when">{{ when | date: "EEEE, d 'de' MMMM 'de' y 'às' HH:mm" }}</span>
+              </p>
+              @if (appointment.status === 'SCHEDULED' || appointment.status === 'CONFIRMED') {
+                @if (!appointment.cancellable && scope() === 'UPCOMING') {
+                  <p class="hint">Faltam menos de 24h: o cancelamento não é mais possível.</p>
+                }
+              }
+            </div>
+            <div class="side">
+              <span class="status" [attr.data-status]="appointment.status">
+                {{ statusLabels[appointment.status] }}
+              </span>
+              @if (appointment.cancellable) {
+                <button
+                  mat-stroked-button
+                  (click)="cancel(appointment)"
+                  [disabled]="cancellingId() === appointment.id"
+                  [attr.aria-label]="'Cancelar consulta com ' + appointment.doctor.name"
+                >
+                  Cancelar
+                </button>
+              }
+            </div>
+          </mat-card>
+        </li>
+      } @empty {
+        <li class="empty">
+          @if (scope() === 'UPCOMING') {
+            Você não tem consultas agendadas. <a routerLink="/paciente/agendar">Agendar agora</a>
+          } @else {
+            Nenhuma consulta no histórico.
+          }
+        </li>
+      }
+    </ul>
+
+    @if (page.totalElements > page.size || page.page > 0) {
+      <mat-paginator
+        [length]="page.totalElements"
+        [pageIndex]="page.page"
+        [pageSize]="page.size"
+        [pageSizeOptions]="[5, 10, 20]"
+        (page)="changePage($event)"
+        aria-label="Paginação das consultas"
+      />
+    }
+  }
+</section>

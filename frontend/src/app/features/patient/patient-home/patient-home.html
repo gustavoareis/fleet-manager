@@ -3,26 +3,42 @@
   <p class="page-subtitle">Bem-vindo(a) à sua área de paciente.</p>
 
   <div class="cards">
-    <mat-card appearance="outlined" class="soon">
+    <mat-card appearance="outlined" class="highlight">
+      <mat-card-header>
+        <mat-icon mat-card-avatar aria-hidden="true">event</mat-icon>
+        <h2 matCardTitle>Próxima consulta</h2>
+      </mat-card-header>
+      <mat-card-content>
+        @if (loadingNext()) {
+          <mat-progress-bar mode="indeterminate" aria-label="Carregando próxima consulta" />
+        } @else if (nextAppointment(); as next) {
+          <p class="next-when">
+            {{ asDate(next.scheduledAt) | date: "EEEE, d 'de' MMMM 'às' HH:mm" }}
+          </p>
+          <p>{{ next.doctor.name }} · {{ next.doctor.specialty }}</p>
+          @if (upcomingCount() > 1) {
+            <p class="muted">E mais {{ upcomingCount() - 1 }} consulta(s) agendada(s).</p>
+          }
+        } @else {
+          <p class="muted">Você não tem consultas agendadas.</p>
+        }
+      </mat-card-content>
+      <mat-card-actions>
+        <a mat-button routerLink="/paciente/consultas">Ver minhas consultas</a>
+      </mat-card-actions>
+    </mat-card>
+
+    <mat-card appearance="outlined">
       <mat-card-header>
         <mat-icon mat-card-avatar aria-hidden="true">event_available</mat-icon>
         <h2 matCardTitle>Agendar consulta</h2>
-        <mat-card-subtitle>Em breve</mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
         <p>Escolha a especialidade, o médico, a data e o horário.</p>
       </mat-card-content>
-    </mat-card>
-
-    <mat-card appearance="outlined" class="soon">
-      <mat-card-header>
-        <mat-icon mat-card-avatar aria-hidden="true">history</mat-icon>
-        <h2 matCardTitle>Minhas consultas</h2>
-        <mat-card-subtitle>Em breve</mat-card-subtitle>
-      </mat-card-header>
-      <mat-card-content>
-        <p>Acompanhe, cancele e veja o histórico das suas consultas.</p>
-      </mat-card-content>
+      <mat-card-actions>
+        <a mat-flat-button routerLink="/paciente/agendar">Agendar agora</a>
+      </mat-card-actions>
     </mat-card>
 
     <mat-card appearance="outlined">

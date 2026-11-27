@@ -1,0 +1,68 @@
+.wizard {
+  overflow: hidden;
+}
+
+.step-title {
+  font: var(--mat-sys-title-medium);
+  margin: 8px 0 12px;
+
+  &::first-letter {
+    text-transform: uppercase; // "segunda-feira, ..." from the date pipe
+  }
+}
+
+.hint,
+.empty {
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.search {
+  width: 100%;
+  max-width: 420px;
+}
+
+mat-selection-list {
+  max-width: 560px;
+}
+
+.calendar {
+  max-width: 360px;
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: var(--mat-sys-corner-medium);
+}
+
+mat-chip-listbox {
+  display: block;
+  margin: 8px 0;
+}
+
+.summary {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 8px 24px;
+  margin: 0 0 16px;
+
+  dt {
+    color: var(--mat-sys-on-surface-variant);
+  }
+
+  dd {
+    margin: 0;
+    font-weight: 500;
+
+    &::first-letter {
+      text-transform: uppercase;
+    }
+  }
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 16px;
+
+  mat-spinner {
+    margin: 0 auto;
+  }
+}

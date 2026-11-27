@@ -11,11 +11,17 @@ interface NavItem {
   label: string;
   icon: string;
   path: string;
+  /** Highlight only on this exact URL (so "Início" isn't active on every /paciente/... page). */
+  exact?: boolean;
 }
 
 /** Links each role sees. Later steps add entries here (booking, my appointments, agenda...). */
 const NAV_BY_ROLE: Record<Role, NavItem[]> = {
-  PATIENT: [{ label: 'Início', icon: 'home', path: '/paciente' }],
+  PATIENT: [
+    { label: 'Início', icon: 'home', path: '/paciente', exact: true },
+    { label: 'Agendar', icon: 'event_available', path: '/paciente/agendar' },
+    { label: 'Minhas consultas', icon: 'event_note', path: '/paciente/consultas' },
+  ],
   DOCTOR: [{ label: 'Agenda', icon: 'calendar_month', path: '/medico' }],
   RECEPTIONIST: [{ label: 'Início', icon: 'home', path: '/equipe' }],
   ADMIN: [{ label: 'Início', icon: 'home', path: '/equipe' }],

@@ -2,6 +2,7 @@ package com.medagenda.auth.security;
 
 import com.medagenda.doctor.DoctorRepository;
 import com.medagenda.patient.PatientRepository;
+import com.medagenda.scheduling.AppointmentRepository;
 import org.springframework.stereotype.Component;
 
 /**
@@ -14,12 +15,14 @@ public class AccessControl {
     private final CurrentUser currentUser;
     private final PatientRepository patientRepository;
     private final DoctorRepository doctorRepository;
+    private final AppointmentRepository appointmentRepository;
 
     public AccessControl(CurrentUser currentUser, PatientRepository patientRepository,
-                         DoctorRepository doctorRepository) {
+                         DoctorRepository doctorRepository, AppointmentRepository appointmentRepository) {
         this.currentUser = currentUser;
         this.patientRepository = patientRepository;
         this.doctorRepository = doctorRepository;
+        this.appointmentRepository = appointmentRepository;
     }
 
     /** True when the logged-in user is the patient with this id. */
@@ -30,5 +33,10 @@ public class AccessControl {
     /** True when the logged-in user is the doctor with this id. */
     public boolean isDoctor(Long doctorId) {
         return doctorRepository.existsByIdAndUserId(doctorId, currentUser.id());
+    }
+
+    /** True when the appointment belongs to the logged-in patient. */
+    public boolean isAppointmentPatient(Long appointmentId) {
+        return appointmentRepository.existsByIdAndPatientUserId(appointmentId, currentUser.id());
     }
 }

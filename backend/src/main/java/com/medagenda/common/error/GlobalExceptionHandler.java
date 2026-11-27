@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.TypeMismatchException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.core.PropertyReferenceException;
 import org.springframework.http.HttpHeaders;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 /**
@@ -131,6 +133,17 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         return ResponseEntity.badRequest()
                 .body(problem(HttpStatus.BAD_REQUEST, "Corpo da requisição inválido ou mal formatado."));
+    }
+
+    /** Query/path parameter of the wrong type (e.g. ?date=abc). */
+    @Override
+    protected ResponseEntity<Object> handleTypeMismatch(
+            TypeMismatchException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+        String parameter = ex instanceof MethodArgumentTypeMismatchException mismatch
+                ? mismatch.getName()
+                : ex.getPropertyName();
+        return ResponseEntity.badRequest().body(problem(HttpStatus.BAD_REQUEST,
+                "Valor inválido para o parâmetro '%s': '%s'.".formatted(parameter, ex.getValue())));
     }
 
     /** Adds the timestamp to problems built by the base class (404 route, 405, 415...). */

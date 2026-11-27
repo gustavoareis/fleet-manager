@@ -13,6 +13,7 @@
         mat-button
         [routerLink]="item.path"
         routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: !!item.exact }"
         ariaCurrentWhenActive="page"
       >
         <mat-icon aria-hidden="true">{{ item.icon }}</mat-icon>
