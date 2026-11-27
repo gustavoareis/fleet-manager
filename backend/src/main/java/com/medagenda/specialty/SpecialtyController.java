@@ -1,5 +1,6 @@
 package com.medagenda.specialty;
 
+import com.medagenda.auth.security.StaffOnly;
 import com.medagenda.common.web.PageResponse;
 import com.medagenda.common.web.Pageables;
 import io.swagger.v3.oas.annotations.Operation;
@@ -48,6 +49,7 @@ public class SpecialtyController {
     }
 
     @PostMapping
+    @StaffOnly
     @Operation(summary = "Cadastra uma especialidade")
     public ResponseEntity<SpecialtyResponse> create(
             @Valid @RequestBody SpecialtyRequest request, UriComponentsBuilder uriBuilder) {
@@ -58,6 +60,7 @@ public class SpecialtyController {
     }
 
     @PutMapping("/{id}")
+    @StaffOnly
     @Operation(summary = "Atualiza uma especialidade")
     public SpecialtyResponse update(@PathVariable Long id, @Valid @RequestBody SpecialtyRequest request) {
         return specialtyService.update(id, request);
@@ -65,6 +68,7 @@ public class SpecialtyController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @StaffOnly
     @Operation(summary = "Exclui uma especialidade sem médicos vinculados")
     public void delete(@PathVariable Long id) {
         specialtyService.delete(id);

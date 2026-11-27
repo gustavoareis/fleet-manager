@@ -1,5 +1,6 @@
 package com.medagenda.doctor;
 
+import com.medagenda.auth.security.AdminOnly;
 import com.medagenda.common.web.PageResponse;
 import com.medagenda.common.web.Pageables;
 import io.swagger.v3.oas.annotations.Operation;
@@ -49,6 +50,7 @@ public class DoctorController {
     }
 
     @PostMapping
+    @AdminOnly
     @Operation(summary = "Cadastra um médico e sua conta de acesso")
     public ResponseEntity<DoctorResponse> create(
             @Valid @RequestBody DoctorCreateRequest request, UriComponentsBuilder uriBuilder) {
@@ -59,6 +61,7 @@ public class DoctorController {
     }
 
     @PutMapping("/{id}")
+    @AdminOnly
     @Operation(summary = "Atualiza os dados de um médico")
     public DoctorResponse update(@PathVariable Long id, @Valid @RequestBody DoctorUpdateRequest request) {
         return doctorService.update(id, request);
@@ -66,6 +69,7 @@ public class DoctorController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @AdminOnly
     @Operation(summary = "Exclui um médico sem consultas registradas")
     public void delete(@PathVariable Long id) {
         doctorService.delete(id);

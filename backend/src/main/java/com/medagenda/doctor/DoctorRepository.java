@@ -21,6 +21,10 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
     @EntityGraph(attributePaths = {"specialty", "user"})
     Optional<Doctor> findWithDetailsById(Long id);
 
+    Optional<Doctor> findByUserId(Long userId);
+
+    boolean existsByIdAndUserId(Long id, Long userId);
+
     boolean existsByCrm(String crm);
 
     boolean existsByCrmAndIdNot(String crm, Long id);

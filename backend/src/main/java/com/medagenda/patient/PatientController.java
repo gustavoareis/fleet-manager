@@ -1,5 +1,7 @@
 package com.medagenda.patient;
 
+import com.medagenda.auth.security.AdminOnly;
+import com.medagenda.auth.security.StaffOnly;
 import com.medagenda.common.web.PageResponse;
 import com.medagenda.common.web.Pageables;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +30,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Tag(name = "Pacientes")
 public class PatientController {
 
+    /** Staff see any patient; a patient sees only their own record. */
+    private static final String STAFF_OR_SELF = "hasAnyRole('ADMIN', 'RECEPTIONIST') or @access.isPatient(#id)";
+
     private final PatientService patientService;
 
     public PatientController(PatientService patientService) {
@@ -34,6 +40,7 @@ public class PatientController {
     }
 
     @GetMapping
+    @StaffOnly
     @Operation(summary = "Lista pacientes (paginado, filtros opcionais por nome e início do CPF)")
     public PageResponse<PatientResponse> search(
             @RequestParam(required = false) String name,
@@ -43,12 +50,14 @@ public class PatientController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize(STAFF_OR_SELF)
     @Operation(summary = "Busca um paciente pelo id")
     public PatientResponse findById(@PathVariable Long id) {
         return patientService.findById(id);
     }
 
     @PostMapping
+    @StaffOnly
     @Operation(summary = "Cadastra um paciente e sua conta de acesso")
     public ResponseEntity<PatientResponse> create(
             @Valid @RequestBody PatientCreateRequest request, UriComponentsBuilder uriBuilder) {
@@ -59,6 +68,7 @@ public class PatientController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize(STAFF_OR_SELF)
     @Operation(summary = "Atualiza os dados de um paciente (o CPF não é editável)")
     public PatientResponse update(@PathVariable Long id, @Valid @RequestBody PatientUpdateRequest request) {
         return patientService.update(id, request);
@@ -66,6 +76,7 @@ public class PatientController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @AdminOnly
     @Operation(summary = "Exclui um paciente sem consultas registradas")
     public void delete(@PathVariable Long id) {
         patientService.delete(id);

@@ -13,6 +13,10 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -65,6 +69,28 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(PropertyReferenceException.class)
     ProblemDetail handleBadSort(PropertyReferenceException ex) {
         return problem(HttpStatus.BAD_REQUEST, "Campo de ordenação inválido: " + ex.getPropertyName() + ".");
+    }
+
+    /**
+     * 401: no token, invalid/expired token, or wrong login credentials. Also reached from the
+     * security filters through SecurityProblemHandler.
+     */
+    @ExceptionHandler(AuthenticationException.class)
+    ResponseEntity<ProblemDetail> handleAuthentication(AuthenticationException ex) {
+        String detail = switch (ex) {
+            case BadCredentialsException ignored -> "E-mail ou senha inválidos.";
+            case OAuth2AuthenticationException ignored -> "Token inválido ou expirado.";
+            default -> "Autenticação necessária.";
+        };
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .header(HttpHeaders.WWW_AUTHENTICATE, "Bearer")
+                .body(problem(HttpStatus.UNAUTHORIZED, detail));
+    }
+
+    /** 403: authenticated, but the role or ownership rule does not allow the operation. */
+    @ExceptionHandler(AccessDeniedException.class)
+    ProblemDetail handleAccessDenied(AccessDeniedException ex) {
+        return problem(HttpStatus.FORBIDDEN, "Você não tem permissão para realizar esta operação.");
     }
 
     @ExceptionHandler(Exception.class)
