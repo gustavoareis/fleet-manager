@@ -2,3 +2,9 @@ spring:
   flyway:
     # Sample data (repeatable migration) is loaded only in dev
     locations: classpath:db/migration,classpath:db/seed
+
+medagenda:
+  security:
+    jwt:
+      # Development-only key. Never reuse it in another environment.
+      secret: ${JWT_SECRET:0wLGj2KMDCpEnbLU05Dvp6+sO9xRLqwnOC1a+YkDCZP2C0Q/kCgGxFjvhROXaAK/}

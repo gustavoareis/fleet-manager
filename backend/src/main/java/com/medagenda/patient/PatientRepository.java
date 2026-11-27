@@ -21,6 +21,10 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
     @EntityGraph(attributePaths = {"healthInsurance", "user"})
     Optional<Patient> findWithDetailsById(Long id);
 
+    Optional<Patient> findByUserId(Long userId);
+
+    boolean existsByIdAndUserId(Long id, Long userId);
+
     boolean existsByCpf(String cpf);
 
     boolean existsByHealthInsuranceId(Long healthInsuranceId);

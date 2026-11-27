@@ -1,5 +1,6 @@
 package com.medagenda.insurance;
 
+import com.medagenda.auth.security.StaffOnly;
 import com.medagenda.common.web.PageResponse;
 import com.medagenda.common.web.Pageables;
 import io.swagger.v3.oas.annotations.Operation;
@@ -49,6 +50,7 @@ public class HealthInsuranceController {
     }
 
     @PostMapping
+    @StaffOnly
     @Operation(summary = "Cadastra um convênio")
     public ResponseEntity<HealthInsuranceResponse> create(
             @Valid @RequestBody HealthInsuranceRequest request, UriComponentsBuilder uriBuilder) {
@@ -59,6 +61,7 @@ public class HealthInsuranceController {
     }
 
     @PutMapping("/{id}")
+    @StaffOnly
     @Operation(summary = "Atualiza (ou ativa/desativa) um convênio")
     public HealthInsuranceResponse update(@PathVariable Long id, @Valid @RequestBody HealthInsuranceRequest request) {
         return insuranceService.update(id, request);
@@ -66,6 +69,7 @@ public class HealthInsuranceController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @StaffOnly
     @Operation(summary = "Exclui um convênio sem pacientes vinculados")
     public void delete(@PathVariable Long id) {
         insuranceService.delete(id);

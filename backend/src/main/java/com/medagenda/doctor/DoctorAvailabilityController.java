@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +24,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Tag(name = "Disponibilidade dos médicos")
 public class DoctorAvailabilityController {
 
+    /** Staff manage any agenda; a doctor manages only their own. */
+    private static final String CAN_MANAGE = "hasAnyRole('ADMIN', 'RECEPTIONIST') or @access.isDoctor(#doctorId)";
+
     private final DoctorAvailabilityService availabilityService;
 
     public DoctorAvailabilityController(DoctorAvailabilityService availabilityService) {
@@ -36,6 +40,7 @@ public class DoctorAvailabilityController {
     }
 
     @PostMapping
+    @PreAuthorize(CAN_MANAGE)
     @Operation(summary = "Adiciona uma janela de atendimento")
     public ResponseEntity<AvailabilityResponse> create(
             @PathVariable Long doctorId, @Valid @RequestBody AvailabilityRequest request,
@@ -48,6 +53,7 @@ public class DoctorAvailabilityController {
     }
 
     @PutMapping("/{availabilityId}")
+    @PreAuthorize(CAN_MANAGE)
     @Operation(summary = "Altera uma janela de atendimento")
     public AvailabilityResponse update(
             @PathVariable Long doctorId, @PathVariable Long availabilityId,
@@ -57,6 +63,7 @@ public class DoctorAvailabilityController {
 
     @DeleteMapping("/{availabilityId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize(CAN_MANAGE)
     @Operation(summary = "Remove uma janela de atendimento")
     public void delete(@PathVariable Long doctorId, @PathVariable Long availabilityId) {
         availabilityService.delete(doctorId, availabilityId);
