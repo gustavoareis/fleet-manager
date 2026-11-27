@@ -1,0 +1,195 @@
+// "segunda-feira, ..." from the date pipe starts in lower case
+.cap::first-letter {
+  text-transform: uppercase;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 16px;
+  margin-bottom: 8px;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.jump {
+  width: 190px;
+  margin-left: auto;
+}
+
+.period {
+  font: var(--mat-sys-title-large);
+  margin: 16px 0 12px;
+}
+
+// ---- counters ----------------------------------------------------------------------------
+.stats {
+  list-style: none;
+  margin: 0 0 20px;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 12px;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 16px;
+  border-radius: var(--mat-sys-corner-medium);
+  background: var(--mat-sys-primary-container);
+  color: var(--mat-sys-on-primary-container);
+
+  &.muted {
+    background: var(--mat-sys-surface-container-high);
+    color: var(--mat-sys-on-surface-variant);
+  }
+
+  .value {
+    font: var(--mat-sys-headline-medium);
+  }
+
+  .label {
+    font: var(--mat-sys-label-large);
+  }
+}
+
+// ---- days and appointments ---------------------------------------------------------------
+.day {
+  margin-bottom: 20px;
+}
+
+.day-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font: var(--mat-sys-title-medium);
+  margin: 0 0 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+}
+
+.today-tag {
+  padding: 2px 10px;
+  border-radius: 999px;
+  font: var(--mat-sys-label-medium);
+  background: var(--mat-sys-tertiary-container);
+  color: var(--mat-sys-on-tertiary-container);
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.item {
+  display: grid;
+  grid-template-columns: 64px 1fr auto;
+  gap: 16px;
+  align-items: start;
+  padding: 14px 16px;
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: var(--mat-sys-corner-medium);
+  background: var(--mat-sys-surface-container-lowest);
+
+  &.dim {
+    opacity: 0.7;
+  }
+
+  @media (max-width: 719px) {
+    grid-template-columns: 56px 1fr;
+
+    .side {
+      grid-column: 1 / -1;
+      align-items: stretch;
+
+      .status-badge {
+        align-self: flex-start;
+      }
+    }
+
+    .actions {
+      justify-content: flex-start;
+    }
+  }
+}
+
+.time {
+  font: var(--mat-sys-title-large);
+  color: var(--mat-sys-primary);
+}
+
+.patient {
+  font: var(--mat-sys-title-medium);
+  margin: 0;
+}
+
+.meta {
+  margin: 2px 0 0;
+  color: var(--mat-sys-on-surface-variant);
+  font: var(--mat-sys-body-medium);
+}
+
+.notes {
+  display: flex;
+  gap: 6px;
+  margin: 8px 0 0;
+  padding: 8px 12px;
+  border-left: 3px solid var(--mat-sys-tertiary);
+  border-radius: 0 var(--mat-sys-corner-small) var(--mat-sys-corner-small) 0;
+  background: var(--mat-sys-surface-container);
+  font: var(--mat-sys-body-medium);
+  white-space: pre-wrap;
+
+  mat-icon {
+    flex: none;
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    color: var(--mat-sys-tertiary);
+  }
+}
+
+.hint {
+  margin: 6px 0 0;
+  font: var(--mat-sys-body-small);
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.side {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.empty {
+  padding: 20px 16px;
+  text-align: center;
+  color: var(--mat-sys-on-surface-variant);
+  border: 1px dashed var(--mat-sys-outline-variant);
+  border-radius: var(--mat-sys-corner-medium);
+}
+
+// Week view: empty days take one quiet line instead of a big box
+.compact .empty {
+  padding: 2px 4px;
+  text-align: left;
+  border: 0;
+  font: var(--mat-sys-body-medium);
+}

@@ -92,32 +92,6 @@ mat-tab-group {
   gap: 8px;
 }
 
-// Status badge: text label always present, color only reinforces it
-.status {
-  padding: 4px 12px;
-  border-radius: 999px;
-  font: var(--mat-sys-label-large);
-  background: var(--mat-sys-surface-container-high);
-  color: var(--mat-sys-on-surface);
-
-  &[data-status='SCHEDULED'],
-  &[data-status='CONFIRMED'] {
-    background: var(--mat-sys-primary-container);
-    color: var(--mat-sys-on-primary-container);
-  }
-
-  &[data-status='COMPLETED'] {
-    background: var(--mat-sys-secondary-container);
-    color: var(--mat-sys-on-secondary-container);
-  }
-
-  &[data-status='CANCELLED'],
-  &[data-status='NO_SHOW'] {
-    background: var(--mat-sys-error-container);
-    color: var(--mat-sys-on-error-container);
-  }
-}
-
 .empty {
   padding: 32px 16px;
   text-align: center;

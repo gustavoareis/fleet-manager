@@ -1,16 +1,8 @@
+import { AppointmentStatus } from '../../../core/api/appointment-status';
+
 /** Mirrors com.medagenda.scheduling DTOs. */
 
-export type AppointmentStatus = 'SCHEDULED' | 'CONFIRMED' | 'CANCELLED' | 'COMPLETED' | 'NO_SHOW';
-
 export type AppointmentScope = 'UPCOMING' | 'HISTORY';
-
-export const STATUS_LABELS: Record<AppointmentStatus, string> = {
-  SCHEDULED: 'Agendada',
-  CONFIRMED: 'Confirmada',
-  CANCELLED: 'Cancelada',
-  COMPLETED: 'Realizada',
-  NO_SHOW: 'Não compareceu',
-};
 
 export interface Appointment {
   id: number;

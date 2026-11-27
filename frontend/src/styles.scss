@@ -94,6 +94,34 @@ mat-icon[mat-card-avatar] {
   font-size: 22px;
 }
 
+// Appointment status badge: the text label is always present, color only reinforces it
+.status-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font: var(--mat-sys-label-large);
+  white-space: nowrap;
+  background: var(--mat-sys-surface-container-high);
+  color: var(--mat-sys-on-surface);
+
+  &[data-status='SCHEDULED'],
+  &[data-status='CONFIRMED'] {
+    background: var(--mat-sys-primary-container);
+    color: var(--mat-sys-on-primary-container);
+  }
+
+  &[data-status='COMPLETED'] {
+    background: var(--mat-sys-secondary-container);
+    color: var(--mat-sys-on-secondary-container);
+  }
+
+  &[data-status='CANCELLED'],
+  &[data-status='NO_SHOW'] {
+    background: var(--mat-sys-error-container);
+    color: var(--mat-sys-on-error-container);
+  }
+}
+
 // Card titles are real <h2> elements (for screen-reader heading navigation)
 h2.mat-mdc-card-title {
   margin: 0;

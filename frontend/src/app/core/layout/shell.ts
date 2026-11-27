@@ -22,7 +22,10 @@ const NAV_BY_ROLE: Record<Role, NavItem[]> = {
     { label: 'Agendar', icon: 'event_available', path: '/paciente/agendar' },
     { label: 'Minhas consultas', icon: 'event_note', path: '/paciente/consultas' },
   ],
-  DOCTOR: [{ label: 'Agenda', icon: 'calendar_month', path: '/medico' }],
+  DOCTOR: [
+    { label: 'Agenda', icon: 'calendar_month', path: '/medico', exact: true },
+    { label: 'Meus horários', icon: 'schedule', path: '/medico/horarios' },
+  ],
   RECEPTIONIST: [{ label: 'Início', icon: 'home', path: '/equipe' }],
   ADMIN: [{ label: 'Início', icon: 'home', path: '/equipe' }],
 };

@@ -122,10 +122,15 @@ JOIN doctors doc ON doc.crm = a.crm
 WHERE NOT EXISTS (SELECT 1 FROM appointments x WHERE x.patient_id = pat.id AND x.scheduled_at = a.scheduled_at)
 ON CONFLICT DO NOTHING;
 
--- Today's agenda for the reception screen (only on weekdays, inside Dr. Ana's morning window)
+-- Today's agenda for the reception and doctor screens (only on weekdays, inside Dr. Ana's
+-- morning window). The early slots let the doctor demo "mark as completed / no-show", which
+-- is only allowed once the appointment time has arrived.
 INSERT INTO appointments (patient_id, doctor_id, scheduled_at, status)
 SELECT pat.id, doc.id, current_date + a.slot, 'SCHEDULED'
 FROM (VALUES
+    ('12345678909', time '08:00'),
+    ('11144477735', time '08:30'),
+    ('24681357928', time '09:00'),
     ('98765432100', time '10:30'),
     ('11144477735', time '11:00'),
     ('24681357928', time '11:30')
