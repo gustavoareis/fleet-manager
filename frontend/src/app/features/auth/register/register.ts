@@ -15,6 +15,7 @@ import { AuthService } from '../../../core/auth/auth.service';
 import { apiErrorMessage, applyServerErrors } from '../../../core/http/api-error';
 import { Page } from '../../../core/http/page';
 import { NotificationService } from '../../../core/ui/notification.service';
+import { todayIsoDate } from '../../../shared/dates';
 import { CrossFieldErrorMatcher } from '../../../shared/forms/cross-field-error-matcher';
 import {
   cpfValidator,
@@ -22,7 +23,6 @@ import {
   onlyDigits,
   pastDateValidator,
   phoneValidator,
-  todayIsoDate,
 } from '../../../shared/validators/br-validators';
 
 @Component({

@@ -1,5 +1,6 @@
 package com.medagenda.auth.security;
 
+import com.medagenda.auth.Role;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,5 +17,11 @@ public class CurrentUser {
             return Long.valueOf(token.getToken().getSubject());
         }
         throw new AuthenticationCredentialsNotFoundException("No authenticated user");
+    }
+
+    public boolean hasRole(Role role) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals("ROLE_" + role.name()));
     }
 }

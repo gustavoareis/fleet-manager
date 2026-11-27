@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface SpecialtyRepository extends JpaRepository<Specialty, Long> {
 
-    @Query("select s from Specialty s where lower(s.name) like :namePattern")
+    @Query("select s from Specialty s where lower(function('unaccent', s.name)) like :namePattern")
     Page<Specialty> search(String namePattern, Pageable pageable);
 
     boolean existsByNameIgnoreCase(String name);

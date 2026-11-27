@@ -27,6 +27,12 @@ spring:
     locale-resolver: fixed
 
 medagenda:
+  scheduling:
+    # Appointment times are clinic-local; "now" is always read in this zone, whatever the
+    # server/container time zone is
+    clinic-zone: America/Sao_Paulo
+    max-days-ahead: 90
+    min-cancellation-notice: PT24H
   security:
     jwt:
       # Base64 key with at least 256 bits. No default on purpose: outside "dev" the app

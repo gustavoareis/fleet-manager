@@ -1,4 +1,5 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { todayIsoDate } from '../dates';
 
 /** Removes everything that is not a digit ("123.456.789-09" -> "12345678909"). */
 export function onlyDigits(value: string): string {
@@ -53,14 +54,3 @@ export const pastDateValidator: ValidatorFn = (control: AbstractControl<string>)
   }
   return control.value < todayIsoDate() ? null : { pastDate: true };
 };
-
-/**
- * Today as "yyyy-mm-dd" in the user's local time zone.
- * (toISOString() would use UTC and return tomorrow after 21:00 in Brazil.)
- */
-export function todayIsoDate(): string {
-  const now = new Date();
-  const month = String(now.getMonth() + 1).padStart(2, '0');
-  const day = String(now.getDate()).padStart(2, '0');
-  return `${now.getFullYear()}-${month}-${day}`;
-}

@@ -9,7 +9,7 @@ public interface HealthInsuranceRepository extends JpaRepository<HealthInsurance
 
     @Query("""
             select h from HealthInsurance h
-            where lower(h.name) like :namePattern
+            where lower(function('unaccent', h.name)) like :namePattern
               and (:active is null or h.active = :active)
             """)
     Page<HealthInsurance> search(String namePattern, Boolean active, Pageable pageable);

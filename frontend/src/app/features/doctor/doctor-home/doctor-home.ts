@@ -4,7 +4,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { AuthService } from '../../../core/auth/auth.service';
-import { Availability, DAY_LABELS, Doctor } from '../doctor.models';
+import { Availability, DAY_LABELS, Doctor } from '../../../core/api/doctor.models';
 
 function minutes(time: string): number {
   const [hours, mins] = time.split(':').map(Number);

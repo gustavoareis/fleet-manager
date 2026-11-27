@@ -1,0 +1,157 @@
+<section class="page">
+  <h1>Agendar consulta</h1>
+  <p class="page-subtitle">Siga as etapas para escolher o atendimento.</p>
+
+  @if (bookingError(); as message) {
+    <p class="form-error" role="alert">
+      <mat-icon aria-hidden="true">error</mat-icon>
+      {{ message }}
+    </p>
+  }
+
+  <mat-card appearance="outlined" class="wizard">
+    <mat-stepper linear [orientation]="orientation()" #stepper>
+      <!-- 1. Specialty -->
+      <mat-step label="Especialidade" [completed]="!!selectedSpecialty()">
+        <h2 class="step-title">Qual especialidade você procura?</h2>
+        @if (specialties.isLoading()) {
+          <mat-progress-bar mode="indeterminate" aria-label="Carregando especialidades" />
+        } @else if (specialties.error()) {
+          <p role="alert">Não foi possível carregar as especialidades.</p>
+        } @else {
+          <mat-selection-list
+            [multiple]="false"
+            aria-label="Especialidades"
+            (selectionChange)="selectSpecialty($event.options[0].value)"
+          >
+            @for (specialty of specialties.value()?.content ?? []; track specialty.id) {
+              <mat-list-option [value]="specialty" [selected]="specialty.id === selectedSpecialty()?.id">
+                {{ specialty.name }}
+              </mat-list-option>
+            }
+          </mat-selection-list>
+        }
+        <div class="actions">
+          <button mat-flat-button matStepperNext [disabled]="!selectedSpecialty()">Próximo</button>
+        </div>
+      </mat-step>
+
+      <!-- 2. Doctor -->
+      <mat-step label="Médico" [completed]="!!selectedDoctor()">
+        <h2 class="step-title">Escolha o médico de {{ selectedSpecialty()?.name }}</h2>
+        <mat-form-field class="search">
+          <mat-label>Buscar por nome</mat-label>
+          <mat-icon matPrefix aria-hidden="true">search</mat-icon>
+          <input matInput [formControl]="doctorSearch" autocomplete="off" />
+        </mat-form-field>
+
+        @let results = doctorResults();
+        @if (results.loading) {
+          <mat-progress-bar mode="indeterminate" aria-label="Buscando médicos" />
+        }
+        @if (results.failed) {
+          <p role="alert">Não foi possível buscar os médicos. Tente novamente.</p>
+        } @else if (!results.loading && results.doctors.length === 0) {
+          <p class="empty">Nenhum médico encontrado.</p>
+        }
+        <p class="visually-hidden" aria-live="polite">
+          @if (!results.loading) {
+            {{ results.doctors.length }} médico(s) encontrado(s)
+          }
+        </p>
+        <mat-selection-list
+          [multiple]="false"
+          aria-label="Médicos"
+          (selectionChange)="selectDoctor($event.options[0].value)"
+        >
+          @for (doctor of results.doctors; track doctor.id) {
+            <mat-list-option [value]="doctor" [selected]="doctor.id === selectedDoctor()?.id">
+              <span matListItemTitle>{{ doctor.name }}</span>
+              <span matListItemLine>CRM {{ doctor.crm }}</span>
+            </mat-list-option>
+          }
+        </mat-selection-list>
+        <div class="actions">
+          <button mat-button matStepperPrevious>Voltar</button>
+          <button mat-flat-button matStepperNext [disabled]="!selectedDoctor()">Próximo</button>
+        </div>
+      </mat-step>
+
+      <!-- 3. Date -->
+      <mat-step label="Data" [completed]="!!selectedDate()">
+        <h2 class="step-title">Escolha o dia</h2>
+        <p class="hint">Somente os dias em que {{ selectedDoctor()?.name }} atende estão disponíveis.</p>
+        @if (loadingDays()) {
+          <mat-progress-bar mode="indeterminate" aria-label="Carregando dias de atendimento" />
+        } @else {
+          <mat-calendar
+            class="calendar"
+            [selected]="selectedDate()"
+            (selectedChange)="selectDate($event)"
+            [minDate]="minDate"
+            [maxDate]="maxDate"
+            [dateFilter]="dateFilter()"
+          />
+        }
+        <div class="actions">
+          <button mat-button matStepperPrevious>Voltar</button>
+          <button mat-flat-button matStepperNext [disabled]="!selectedDate()">Próximo</button>
+        </div>
+      </mat-step>
+
+      <!-- 4. Time -->
+      <mat-step label="Horário" [completed]="!!selectedTime()">
+        <h2 class="step-title">Horários livres em {{ selectedDate() | date: "EEEE, d 'de' MMMM" }}</h2>
+        @if (freeSlots.isLoading()) {
+          <mat-progress-bar mode="indeterminate" aria-label="Carregando horários" />
+        } @else if (freeSlots.error()) {
+          <p role="alert">Não foi possível carregar os horários.</p>
+        } @else if (freeSlots.value(); as free) {
+          @if (free.slots.length) {
+            <mat-chip-listbox
+              aria-label="Horários disponíveis"
+              [value]="selectedTime()"
+              (change)="selectTime($event.value)"
+            >
+              @for (slot of free.slots; track slot) {
+                <mat-chip-option [value]="slot">{{ formatTime(slot) }}</mat-chip-option>
+              }
+            </mat-chip-listbox>
+          } @else {
+            <p class="empty">Não há horários livres neste dia. Escolha outra data.</p>
+          }
+        }
+        <div class="actions">
+          <button mat-button matStepperPrevious>Voltar</button>
+          <button mat-flat-button matStepperNext [disabled]="!selectedTime()">Próximo</button>
+        </div>
+      </mat-step>
+
+      <!-- 5. Confirmation -->
+      <mat-step label="Confirmação">
+        <h2 class="step-title">Confirme o agendamento</h2>
+        <dl class="summary">
+          <dt>Especialidade</dt>
+          <dd>{{ selectedSpecialty()?.name }}</dd>
+          <dt>Médico</dt>
+          <dd>{{ selectedDoctor()?.name }}</dd>
+          <dt>Data</dt>
+          <dd>{{ selectedDateTime() | date: "EEEE, d 'de' MMMM 'de' y" }}</dd>
+          <dt>Horário</dt>
+          <dd>{{ selectedDateTime() | date: 'HH:mm' }}</dd>
+        </dl>
+        <p class="hint">Cancelamentos são permitidos com até 24 horas de antecedência.</p>
+        <div class="actions">
+          <button mat-button matStepperPrevious [disabled]="submitting()">Voltar</button>
+          <button mat-flat-button (click)="confirm()" [disabled]="submitting() || !selectedDateTime()">
+            @if (submitting()) {
+              <mat-spinner diameter="20" aria-label="Agendando" />
+            } @else {
+              Confirmar agendamento
+            }
+          </button>
+        </div>
+      </mat-step>
+    </mat-stepper>
+  </mat-card>
+</section>

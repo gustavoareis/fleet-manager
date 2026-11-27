@@ -1,4 +1,4 @@
-import { Specialty } from '../../core/api/catalog.models';
+import { Specialty } from './catalog.models';
 
 export type DayOfWeek =
   | 'MONDAY'
