@@ -1,0 +1,15 @@
+{
+  "name": "medagenda-e2e",
+  "private": true,
+  "version": "1.0.0",
+  "description": "End-to-end tests (Playwright) for MedAgenda",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.65.1",
+    "@types/node": "^24.0.0"
+  }
+}
