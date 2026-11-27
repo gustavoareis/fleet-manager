@@ -10,12 +10,13 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTabsModule } from '@angular/material/tabs';
 import { RouterLink } from '@angular/router';
 import { filter, switchMap } from 'rxjs';
+import { STATUS_LABELS } from '../../../../core/api/appointment-status';
 import { apiErrorMessage } from '../../../../core/http/api-error';
 import { Page } from '../../../../core/http/page';
 import { NotificationService } from '../../../../core/ui/notification.service';
 import { confirm } from '../../../../shared/ui/confirm-dialog';
 import { SchedulingApi } from '../scheduling.api';
-import { Appointment, AppointmentScope, STATUS_LABELS } from '../scheduling.models';
+import { Appointment, AppointmentScope } from '../scheduling.models';
 
 const SCOPES: AppointmentScope[] = ['UPCOMING', 'HISTORY'];
 

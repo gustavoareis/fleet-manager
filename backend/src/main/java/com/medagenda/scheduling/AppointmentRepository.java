@@ -17,6 +17,18 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
 
     boolean existsByIdAndPatientUserId(Long id, Long userId);
 
+    boolean existsByIdAndDoctorUserId(Long id, Long userId);
+
+    /** One doctor's agenda in [from, to), soonest first. The graph loads patient data in one query. */
+    @EntityGraph(attributePaths = {"patient", "patient.healthInsurance", "doctor"})
+    @Query("""
+            select a from Appointment a
+            where a.doctor.id = :doctorId
+              and a.scheduledAt >= :from and a.scheduledAt < :to
+            order by a.scheduledAt
+            """)
+    List<Appointment> findAgenda(Long doctorId, LocalDateTime from, LocalDateTime to);
+
     /** Slot taken by the doctor (cancelled appointments free the slot). */
     boolean existsByDoctorIdAndScheduledAtAndStatusIn(
             Long doctorId, LocalDateTime scheduledAt, Collection<AppointmentStatus> statuses);

@@ -1,0 +1,158 @@
+<section class="page">
+  <h1>Agenda</h1>
+  <p class="page-subtitle">Olá, {{ firstName() }}. Acompanhe e registre os atendimentos.</p>
+
+  <!-- Controls -->
+  <div class="controls" role="group" aria-label="Controles da agenda">
+    <mat-button-toggle-group
+      [value]="view()"
+      (change)="changeView($event.value)"
+      aria-label="Modo de visualização"
+      hideSingleSelectionIndicator
+    >
+      <mat-button-toggle value="day">Dia</mat-button-toggle>
+      <mat-button-toggle value="week">Semana</mat-button-toggle>
+    </mat-button-toggle-group>
+
+    <div class="nav">
+      <button mat-icon-button (click)="step(-1)" [attr.aria-label]="view() === 'day' ? 'Dia anterior' : 'Semana anterior'">
+        <mat-icon aria-hidden="true">chevron_left</mat-icon>
+      </button>
+      <button mat-stroked-button (click)="goToToday()" [disabled]="isCurrentPeriod()">Hoje</button>
+      <button mat-icon-button (click)="step(1)" [attr.aria-label]="view() === 'day' ? 'Próximo dia' : 'Próxima semana'">
+        <mat-icon aria-hidden="true">chevron_right</mat-icon>
+      </button>
+    </div>
+
+    <mat-form-field class="jump" subscriptSizing="dynamic">
+      <mat-label>Ir para a data</mat-label>
+      <input matInput type="date" [value]="referenceIso()" (change)="goToDate($any($event.target).value)" />
+    </mat-form-field>
+  </div>
+
+  <h2 class="period" aria-live="polite">
+    @let from = range().from;
+    @let to = range().to;
+    @if (view() === 'day') {
+      <span class="cap">{{ from | date: "EEEE, d 'de' MMMM 'de' y" }}</span>
+    } @else {
+      {{ from | date: "d 'de' MMM" }} a {{ to | date: "d 'de' MMM 'de' y" }}
+    }
+  </h2>
+
+  <!-- Counters (computed from the loaded appointments) -->
+  <ul class="stats" aria-label="Resumo do período">
+    <li class="stat">
+      <span class="value">{{ changingPeriod() ? '–' : stats().total }}</span>
+      <span class="label">Consultas</span>
+    </li>
+    <li class="stat">
+      <span class="value">{{ changingPeriod() ? '–' : stats().waiting }}</span>
+      <span class="label">Aguardando</span>
+    </li>
+    <li class="stat">
+      <span class="value">{{ changingPeriod() ? '–' : stats().completed }}</span>
+      <span class="label">Realizadas</span>
+    </li>
+    <li class="stat">
+      <span class="value">{{ changingPeriod() ? '–' : stats().noShow }}</span>
+      <span class="label">Faltas</span>
+    </li>
+    @if (stats().cancelled > 0) {
+      <li class="stat muted">
+        <span class="value">{{ changingPeriod() ? '–' : stats().cancelled }}</span>
+        <span class="label">Canceladas</span>
+      </li>
+    }
+  </ul>
+
+  @if (appointments.isLoading()) {
+    <mat-progress-bar mode="indeterminate" aria-label="Carregando agenda" />
+  }
+
+  @if (appointments.error()) {
+    <p class="form-error" role="alert">
+      <mat-icon aria-hidden="true">error</mat-icon>
+      Não foi possível carregar a agenda.
+    </p>
+  } @else {
+    @for (day of days(); track day.iso) {
+      <section class="day" [attr.aria-labelledby]="'day-' + day.iso">
+        @if (view() === 'week') {
+          <h3 class="day-title" [id]="'day-' + day.iso">
+            <span class="cap">{{ day.date | date: "EEEE, d 'de' MMM" }}</span>
+            @if (day.isToday) {
+              <span class="today-tag">Hoje</span>
+            }
+          </h3>
+        }
+
+        <ul class="list" [class.compact]="view() === 'week'">
+          @for (appointment of day.appointments; track appointment.id) {
+            <li class="item" [class.dim]="appointment.status === 'CANCELLED'">
+              <div class="time">{{ time(appointment) }}</div>
+
+              <div class="info">
+                <p class="patient">{{ appointment.patient.name }}</p>
+                <p class="meta">
+                  {{ age(appointment) }} anos · {{ appointment.patient.insurance ?? 'Particular' }} ·
+                  {{ appointment.patient.phone | phone }}
+                </p>
+                @if (appointment.notes) {
+                  <p class="notes">
+                    <mat-icon aria-hidden="true">sticky_note_2</mat-icon>
+                    <span><span class="visually-hidden">Anotações: </span>{{ appointment.notes }}</span>
+                  </p>
+                }
+                @if (isActive(appointment) && !appointment.canRecordOutcome) {
+                  <p class="hint">Disponível para registro a partir do horário da consulta.</p>
+                }
+              </div>
+
+              <div class="side">
+                <span class="status-badge" [attr.data-status]="appointment.status">
+                  {{ statusLabels[appointment.status] }}
+                </span>
+                <div class="actions">
+                  @if (appointment.canRecordOutcome) {
+                    <button
+                      mat-flat-button
+                      (click)="record(appointment, 'complete')"
+                      [disabled]="busyId() === appointment.id"
+                      [attr.aria-label]="'Concluir consulta de ' + appointment.patient.name"
+                    >
+                      Concluir
+                    </button>
+                    <button
+                      mat-stroked-button
+                      (click)="record(appointment, 'no-show')"
+                      [disabled]="busyId() === appointment.id"
+                      [attr.aria-label]="'Registrar falta de ' + appointment.patient.name"
+                    >
+                      Faltou
+                    </button>
+                  }
+                  @if (appointment.status !== 'CANCELLED') {
+                    <button
+                      mat-button
+                      (click)="editNotes(appointment)"
+                      [disabled]="busyId() === appointment.id"
+                      [attr.aria-label]="'Anotações da consulta de ' + appointment.patient.name"
+                    >
+                      <mat-icon aria-hidden="true">edit_note</mat-icon>
+                      Anotações
+                    </button>
+                  }
+                </div>
+              </div>
+            </li>
+          } @empty {
+            @if (!appointments.isLoading()) {
+              <li class="empty">{{ view() === 'day' ? 'Nenhuma consulta neste dia.' : 'Sem consultas.' }}</li>
+            }
+          }
+        </ul>
+      </section>
+    }
+  }
+</section>

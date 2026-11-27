@@ -35,6 +35,11 @@ public class AccessControl {
         return doctorRepository.existsByIdAndUserId(doctorId, currentUser.id());
     }
 
+    /** True when the appointment is on the logged-in doctor's agenda. */
+    public boolean isAppointmentDoctor(Long appointmentId) {
+        return appointmentRepository.existsByIdAndDoctorUserId(appointmentId, currentUser.id());
+    }
+
     /** True when the appointment belongs to the logged-in patient. */
     public boolean isAppointmentPatient(Long appointmentId) {
         return appointmentRepository.existsByIdAndPatientUserId(appointmentId, currentUser.id());

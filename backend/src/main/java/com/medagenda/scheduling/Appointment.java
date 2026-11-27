@@ -88,6 +88,45 @@ public class Appointment {
         this.status = AppointmentStatus.CANCELLED;
     }
 
+    /** The doctor can only record the outcome once the appointment time has arrived. */
+    public boolean canRecordOutcome(LocalDateTime now) {
+        return isActive() && !scheduledAt.isAfter(now);
+    }
+
+    public void complete(LocalDateTime now, String notes) {
+        recordOutcome(AppointmentStatus.COMPLETED, now, notes);
+    }
+
+    public void markNoShow(LocalDateTime now, String notes) {
+        recordOutcome(AppointmentStatus.NO_SHOW, now, notes);
+    }
+
+    /** Clinical notes can be written (or corrected) after the visit too, but not on cancelled ones. */
+    public void updateNotes(String notes) {
+        if (status == AppointmentStatus.CANCELLED) {
+            throw new BusinessException("Não é possível adicionar anotações a uma consulta cancelada.");
+        }
+        this.notes = normalizeNotes(notes);
+    }
+
+    private void recordOutcome(AppointmentStatus outcome, LocalDateTime now, String notes) {
+        if (!isActive()) {
+            throw new BusinessException("O atendimento só pode ser registrado em consultas agendadas ou confirmadas.");
+        }
+        if (!canRecordOutcome(now)) {
+            throw new BusinessException("O atendimento só pode ser registrado a partir do horário da consulta.");
+        }
+        this.status = outcome;
+        if (notes != null) {
+            this.notes = normalizeNotes(notes);
+        }
+    }
+
+    /** Blank text is stored as "no notes" (null), so the UI never has to tell "" from missing. */
+    private static String normalizeNotes(String notes) {
+        return notes == null || notes.isBlank() ? null : notes.strip();
+    }
+
     public Long getId() {
         return id;
     }

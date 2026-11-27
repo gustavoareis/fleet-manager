@@ -16,6 +16,33 @@ export function todayIsoDate(): string {
   return toIsoDate(new Date());
 }
 
+/** "yyyy-mm-dd" -> Date at local midnight. (new Date("2026-12-07") would be UTC midnight: the day before in Brazil.) */
+export function parseIsoDate(value: string): Date {
+  const [year, month, day] = value.split('-').map(Number);
+  return new Date(year, month - 1, day);
+}
+
+export function addDays(date: Date, days: number): Date {
+  const result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return result;
+}
+
+/** Monday of the week containing the date (the clinic week runs Monday to Sunday). */
+export function startOfWeek(date: Date): Date {
+  const daysSinceMonday = (date.getDay() + 6) % 7;
+  return addDays(new Date(date.getFullYear(), date.getMonth(), date.getDate()), -daysSinceMonday);
+}
+
+/** Completed years between a "yyyy-mm-dd" birth date and today. */
+export function ageFrom(birthDate: string, today: Date = new Date()): number {
+  const birth = parseIsoDate(birthDate);
+  const hadBirthdayThisYear =
+    today.getMonth() > birth.getMonth() ||
+    (today.getMonth() === birth.getMonth() && today.getDate() >= birth.getDate());
+  return today.getFullYear() - birth.getFullYear() - (hadBirthdayThisYear ? 0 : 1);
+}
+
 /** Local midnight of today plus N days. */
 export function startOfDayPlus(days: number): Date {
   const date = new Date();
