@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: medagenda
+  # Local runs use the "dev" profile (sample data) unless SPRING_PROFILES_ACTIVE says otherwise
+  profiles:
+    default: dev
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/medagenda}
+    username: ${DB_USERNAME:medagenda}
+    password: ${DB_PASSWORD:medagenda}
+  jpa:
+    # Flyway owns the schema; Hibernate only checks that entities match it
+    hibernate:
+      ddl-auto: validate
+    # Forces all lazy loading to happen inside service transactions, never during JSON rendering
+    open-in-view: false
+  flyway:
+    locations: classpath:db/migration
+  data:
+    web:
+      pageable:
+        default-page-size: 20
+        max-page-size: 100
+  # Validation and error messages are shown to Brazilian users
+  web:
+    locale: pt_BR
+    locale-resolver: fixed
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: method

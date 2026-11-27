@@ -1,0 +1,4 @@
+spring:
+  flyway:
+    # Sample data (repeatable migration) is loaded only in dev
+    locations: classpath:db/migration,classpath:db/seed
