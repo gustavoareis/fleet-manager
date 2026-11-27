@@ -80,8 +80,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(AuthenticationException.class)
     ResponseEntity<ProblemDetail> handleAuthentication(AuthenticationException ex) {
         String detail = switch (ex) {
-            case BadCredentialsException ignored -> "E-mail ou senha inválidos.";
-            case OAuth2AuthenticationException ignored -> "Token inválido ou expirado.";
+            case BadCredentialsException _ -> "E-mail ou senha inválidos.";
+            case OAuth2AuthenticationException _ -> "Token inválido ou expirado.";
             default -> "Autenticação necessária.";
         };
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)

@@ -85,6 +85,6 @@ class AppointmentPersistenceIntegrationTest {
         // Seed has "Dr. Fábio Souza"; the user types without the accent, in any case
         var found = doctors.search("%fabio%", null, PageRequest.of(0, 10));
 
-        assertThat(found.getContent()).extracting(Doctor::getName).anyMatch(name -> name.contains("Fábio"));
+        assertThat(found.getContent()).extracting(doctor -> doctor.getName()).anyMatch(name -> name.contains("Fábio"));
     }
 }

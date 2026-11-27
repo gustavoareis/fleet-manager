@@ -14,7 +14,7 @@ public record StatusSummary(long total, long scheduled, long confirmed, long com
         for (Object[] row : rows) {
             counts.put((AppointmentStatus) row[0], (Long) row[1]);
         }
-        long total = counts.values().stream().mapToLong(Long::longValue).sum();
+        long total = counts.values().stream().mapToLong(count -> count).sum();
         return new StatusSummary(
                 total,
                 counts.getOrDefault(AppointmentStatus.SCHEDULED, 0L),

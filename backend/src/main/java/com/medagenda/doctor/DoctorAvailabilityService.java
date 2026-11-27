@@ -14,8 +14,8 @@ public class DoctorAvailabilityService {
 
     private static final long NO_ID = -1L;
     private static final Comparator<DoctorAvailability> WEEKLY_ORDER = Comparator
-            .comparing(DoctorAvailability::getDayOfWeek)
-            .thenComparing(DoctorAvailability::getStartTime);
+            .comparing((DoctorAvailability window) -> window.getDayOfWeek())
+            .thenComparing(window -> window.getStartTime());
 
     private final DoctorAvailabilityRepository availabilityRepository;
     private final DoctorService doctorService;

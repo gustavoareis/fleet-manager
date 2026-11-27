@@ -14,7 +14,6 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -53,7 +52,7 @@ public class SecurityConfig {
         http.securityMatcher("/api/**")
                 // CSRF abuses cookies the browser sends automatically. The API is authenticated by a
                 // header the frontend adds explicitly, so there is nothing for CSRF to exploit.
-                .csrf(AbstractHttpConfigurer::disable)
+                .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
@@ -129,7 +128,7 @@ public class SecurityConfig {
         // authenticates nobody and denies every direct request, so there is nothing to protect.
         // Leaving it on would also re-check the token on the internal forward to a JSP after a
         // POST was already refused by the admin chain, hiding that chain's friendly 403 page.
-        http.csrf(AbstractHttpConfigurer::disable);
+        http.csrf(csrf -> csrf.disable());
         http.authorizeHttpRequests(auth -> auth
                 // Spring Security also authorizes server-side dispatches. When a controller renders a
                 // JSP, MVC forwards to /WEB-INF/jsp/...; that internal hop must not hit "denyAll".
