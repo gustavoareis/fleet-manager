@@ -1,0 +1,51 @@
+<!-- First focusable element: keyboard users can jump straight past the navigation -->
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+<mat-toolbar class="toolbar" role="banner">
+  <a class="brand" [routerLink]="auth.homeUrl()" aria-label="MedAgenda, página inicial">
+    <mat-icon aria-hidden="true">medical_services</mat-icon>
+    <span class="brand-name">MedAgenda</span>
+  </a>
+
+  <nav class="nav" aria-label="Navegação principal">
+    @for (item of navItems(); track item.path) {
+      <a
+        mat-button
+        [routerLink]="item.path"
+        routerLinkActive="active"
+        ariaCurrentWhenActive="page"
+      >
+        <mat-icon aria-hidden="true">{{ item.icon }}</mat-icon>
+        <span class="nav-label">{{ item.label }}</span>
+      </a>
+    }
+  </nav>
+
+  <span class="spacer"></span>
+
+  <button
+    mat-button
+    class="user-button"
+    [matMenuTriggerFor]="userMenu"
+    [attr.aria-label]="'Menu do usuário ' + auth.user()?.displayName"
+  >
+    <mat-icon aria-hidden="true">account_circle</mat-icon>
+    <span class="user-name">{{ auth.firstName() }}</span>
+  </button>
+
+  <mat-menu #userMenu="matMenu" xPosition="before">
+    <div class="menu-header" aria-hidden="true">
+      <strong>{{ auth.user()?.displayName }}</strong>
+      <span>{{ roleLabel() }}</span>
+    </div>
+    <button mat-menu-item (click)="logout()">
+      <mat-icon aria-hidden="true">logout</mat-icon>
+      <span>Sair</span>
+    </button>
+  </mat-menu>
+</mat-toolbar>
+
+<!-- tabindex=-1 lets the skip link move focus here -->
+<main id="conteudo" tabindex="-1">
+  <router-outlet />
+</main>

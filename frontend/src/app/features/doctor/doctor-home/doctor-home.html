@@ -1,0 +1,60 @@
+<section class="page">
+  <h1>Olá, {{ auth.firstName() }}!</h1>
+  <p class="page-subtitle">
+    @if (doctor.value(); as data) {
+      {{ data.specialty.name }} · CRM {{ data.crm }}
+    } @else {
+      Sua área de atendimento.
+    }
+  </p>
+
+  <div class="stats" role="list">
+    <div class="stat" role="listitem">
+      <span class="stat-value">{{ weeklyHours() }}h</span>
+      <span class="stat-label">de atendimento por semana</span>
+    </div>
+    <div class="stat" role="listitem">
+      <span class="stat-value">{{ weeklySlots() }}</span>
+      <span class="stat-label">horários de consulta por semana</span>
+    </div>
+  </div>
+
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-icon mat-card-avatar aria-hidden="true">schedule</mat-icon>
+      <h2 matCardTitle>Disponibilidade semanal</h2>
+      <mat-card-subtitle>A agenda diária chega em breve</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      @if (availabilities.isLoading()) {
+        <mat-progress-bar mode="indeterminate" aria-label="Carregando disponibilidade" />
+      } @else if (availabilities.error()) {
+        <p role="alert">Não foi possível carregar a disponibilidade.</p>
+      } @else {
+        <table class="availability">
+          <caption class="visually-hidden">Janelas de atendimento por dia da semana</caption>
+          <thead>
+            <tr>
+              <th scope="col">Dia</th>
+              <th scope="col">Horário</th>
+              <th scope="col">Duração da consulta</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (slot of availabilities.value(); track slot.id) {
+              <tr>
+                <td>{{ dayLabels[slot.dayOfWeek] }}</td>
+                <td>{{ time(slot.startTime) }} – {{ time(slot.endTime) }}</td>
+                <td>{{ slot.slotDurationMinutes }} min</td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="3">Nenhuma disponibilidade cadastrada.</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+    </mat-card-content>
+  </mat-card>
+</section>

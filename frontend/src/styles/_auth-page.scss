@@ -1,0 +1,67 @@
+// Shared layout of the public auth pages (login, sign-up): a centered card on a tinted background.
+@mixin auth-page($card-width: 420px) {
+  :host {
+    display: block;
+    min-height: 100%;
+    background: linear-gradient(
+      160deg,
+      var(--mat-sys-primary-container) 0%,
+      var(--mat-sys-surface) 55%
+    );
+  }
+
+  .auth-page {
+    display: grid;
+    place-items: center;
+    min-height: 100vh;
+    padding: 24px 16px;
+    box-sizing: border-box;
+  }
+
+  .auth-card {
+    width: 100%;
+    max-width: $card-width;
+    padding: 24px;
+    box-sizing: border-box;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--mat-sys-primary);
+    font: var(--mat-sys-title-large);
+    margin-bottom: 8px;
+
+    mat-icon {
+      font-size: 32px;
+      width: 32px;
+      height: 32px;
+    }
+  }
+
+  h1 {
+    font: var(--mat-sys-headline-small);
+    margin: 0 0 4px;
+  }
+
+  .subtitle {
+    color: var(--mat-sys-on-surface-variant);
+    margin: 0 0 24px;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .submit {
+    margin-top: 8px;
+    height: 48px;
+  }
+
+  .alternate {
+    text-align: center;
+    margin: 24px 0 0;
+  }
+}
