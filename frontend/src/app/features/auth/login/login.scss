@@ -1,0 +1,30 @@
+@use 'auth-page';
+
+@include auth-page.auth-page();
+
+.submit mat-spinner {
+  margin: 0 auto;
+}
+
+.demo {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--mat-sys-outline-variant);
+
+  h2 {
+    font: var(--mat-sys-title-small);
+    margin: 0 0 4px;
+  }
+
+  p {
+    font: var(--mat-sys-body-small);
+    color: var(--mat-sys-on-surface-variant);
+    margin: 0 0 12px;
+  }
+}
+
+.demo-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}

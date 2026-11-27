@@ -1,0 +1,35 @@
+@use 'auth-page';
+
+@include auth-page.auth-page($card-width: 680px);
+
+fieldset {
+  border: 0;
+  margin: 0 0 8px;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  column-gap: 16px;
+
+  // Two columns from tablet width up; full-width fields span both
+  @media (min-width: 600px) {
+    grid-template-columns: 1fr 1fr;
+
+    .full {
+      grid-column: 1 / -1;
+    }
+  }
+}
+
+legend {
+  font: var(--mat-sys-title-small);
+  color: var(--mat-sys-on-surface-variant);
+  margin-bottom: 12px;
+}
+
+mat-form-field {
+  margin-bottom: 8px;
+}
+
+.submit mat-spinner {
+  margin: 0 auto;
+}
