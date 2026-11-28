@@ -6,6 +6,7 @@ O projeto combina uma aplicação moderna (Angular + API REST com JWT) com um m�
 
 ## Sumário
 
+- [Telas](#telas)
 - [Stack](#stack)
 - [Arquitetura](#arquitetura)
 - [Perfis e permissões](#perfis-e-permissões)
@@ -17,6 +18,48 @@ O projeto combina uma aplicação moderna (Angular + API REST com JWT) com um m�
 - [Estrutura do repositório](#estrutura-do-repositório)
 - [Decisões técnicas](#decisões-técnicas)
 - [Status do projeto](#status-do-projeto)
+
+## Telas
+
+O Angular tem modo claro e escuro (botão no menu lateral); a recepção usa o módulo JSP.
+
+| Login (modo claro) | Login (modo escuro) |
+|---|---|
+| ![Login no modo claro](docs/screenshots/login-claro.png) | ![Login no modo escuro](docs/screenshots/login-escuro.png) |
+
+| Início do paciente (claro) | Início do paciente (escuro) |
+|---|---|
+| ![Início do paciente no modo claro](docs/screenshots/paciente-inicio-claro.png) | ![Início do paciente no modo escuro](docs/screenshots/paciente-inicio-escuro.png) |
+
+Agendamento em etapas (especialidade, médico, data, horário e confirmação):
+
+| Médico (busca por nome) | Data (só dias de atendimento) |
+|---|---|
+| ![Escolha do médico](docs/screenshots/agendar-medico.png) | ![Escolha da data](docs/screenshots/agendar-data.png) |
+
+| Horários livres | Confirmação |
+|---|---|
+| ![Horários livres](docs/screenshots/agendar-horario.png) | ![Confirmação do agendamento](docs/screenshots/agendar-confirmacao.png) |
+
+| Minhas consultas | Histórico |
+|---|---|
+| ![Próximas consultas do paciente](docs/screenshots/paciente-consultas.png) | ![Histórico de consultas](docs/screenshots/paciente-historico.png) |
+
+Área do médico:
+
+![Agenda do médico](docs/screenshots/medico-agenda.png)
+
+Recepção (módulo JSP):
+
+| Consultas do dia | Relatório |
+|---|---|
+| ![Consultas do dia na recepção](docs/screenshots/recepcao-consultas.png) | ![Relatório de consultas](docs/screenshots/recepcao-relatorio.png) |
+
+Versão para celular (o menu lateral vira uma barra no topo):
+
+| Início do paciente | Minhas consultas | Agenda do médico | Horários do médico |
+|---|---|---|---|
+| <img src="docs/screenshots/mobile-paciente-inicio.png" width="200" alt="Início do paciente no celular"> | <img src="docs/screenshots/mobile-paciente-consultas.png" width="200" alt="Minhas consultas no celular"> | <img src="docs/screenshots/mobile-medico-agenda.png" width="200" alt="Agenda do médico no celular"> | <img src="docs/screenshots/mobile-medico-horarios.png" width="200" alt="Horários do médico no celular"> |
 
 ## Stack
 
