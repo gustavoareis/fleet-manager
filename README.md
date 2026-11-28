@@ -22,7 +22,7 @@ O projeto combina uma aplicação moderna (Angular + API REST com JWT) com um m�
 
 | Camada | Tecnologias |
 |---|---|
-| Frontend | Angular 22 (standalone, Signals, zoneless, `@if`/`@for`), RxJS, rotas lazy com guards, formulários reativos tipados, SCSS, Angular Material com tema próprio |
+| Frontend | Angular 22 (standalone, Signals, zoneless, `@if`/`@for`), RxJS, rotas lazy com guards, formulários reativos tipados, SCSS, Angular Material com tema próprio (paleta hospitalar, modo claro/escuro, fontes Outfit e Figtree locais) |
 | Backend | Java 25, Spring Boot 4.2, Spring Security (JWT e sessão), Spring Data JPA/Hibernate, Flyway, OpenAPI (springdoc) |
 | Módulo legado | JSP + JSTL no mesmo backend (pacote WAR executável) |
 | Banco | PostgreSQL (com extensão `unaccent`) |
@@ -220,6 +220,7 @@ Resumo das escolhas que mais valem explicar:
 7. **XSS no JSP.** A EL não escapa nada por padrão, então todo dado do usuário passa por `<c:out>`.
 8. **Erros por tipo de cliente.** Um `@ControllerAdvice` restrito ao pacote `admin` devolve páginas HTML, enquanto a API devolve JSON Problem Details.
 9. **Datas sempre locais.** O frontend nunca usa `toISOString()` para montar datas da API, evitando o erro de "dia anterior" por causa do UTC.
+10. **Tema com `light-dark()`.** Uma única definição de tema Material serve aos dois modos. O botão de tema grava a escolha no `localStorage` e a aplica via `color-scheme`; sem escolha, vale a preferência do sistema. As animações são sutis (linha de ECG, contadores, status pulsante) e todas respeitam `prefers-reduced-motion`.
 
 ## Status do projeto
 
