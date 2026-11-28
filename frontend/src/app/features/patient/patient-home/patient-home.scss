@@ -15,17 +15,64 @@ mat-card-content {
 }
 
 mat-card-actions {
-  padding: 8px 16px 16px;
+  padding: 8px 16px 20px;
+}
+
+mat-card-header {
+  padding: 20px 20px 0;
+}
+
+mat-card-content {
+  padding-inline: 20px;
 }
 
 .highlight {
-  border-color: var(--mat-sys-primary);
+  position: relative;
+  color: #eafff5;
+  background:
+    radial-gradient(360px 220px at 100% 100%, rgb(123 224 176 / 30%), transparent 70%),
+    linear-gradient(155deg, #0b6e79 0%, #07424a 100%);
+
+  // Same card, dark teal: everything inside switches to light tones
+  --mat-card-outlined-container-color: transparent;
+  --mat-card-title-text-color: #eafff5;
+  --mat-card-subtitle-text-color: #b9e8d6;
+  --mat-button-text-label-text-color: #7be0b0;
+
+  mat-icon[mat-card-avatar] {
+    background: rgb(255 255 255 / 14%);
+    color: #7be0b0;
+  }
+
+  .next-when,
+  .muted {
+    color: #eafff5;
+  }
+
+  .muted {
+    opacity: 0.8;
+  }
+}
+
+mat-card {
+  transition:
+    transform 300ms var(--ma-ease),
+    box-shadow 300ms var(--ma-ease);
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--ma-shadow-lift);
+  }
 }
 
 .next-when {
-  font: var(--mat-sys-title-medium);
+  font-family: var(--ma-display);
+  font-size: 1.6rem;
+  font-weight: 300;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
   color: var(--mat-sys-primary);
-  margin-bottom: 4px;
+  margin-bottom: 8px;
 
   &::first-letter {
     text-transform: uppercase;

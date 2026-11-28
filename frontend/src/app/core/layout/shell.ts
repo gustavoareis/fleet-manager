@@ -1,9 +1,8 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
-import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { ThemeToggle } from '../../shared/ui/theme-toggle';
 import { ROLE_LABELS, Role } from '../auth/auth.models';
 import { AuthService } from '../auth/auth.service';
 
@@ -30,17 +29,16 @@ const NAV_BY_ROLE: Record<Role, NavItem[]> = {
   ADMIN: [{ label: 'Início', icon: 'home', path: '/equipe' }],
 };
 
-/** Frame of every authenticated page: toolbar + navigation + the routed page. */
+/** Frame of every authenticated page: navigation rail + the routed page. */
 @Component({
   selector: 'app-shell',
   imports: [
     RouterOutlet,
     RouterLink,
     RouterLinkActive,
-    MatButtonModule,
     MatIconModule,
     MatMenuModule,
-    MatToolbarModule,
+    ThemeToggle,
   ],
   templateUrl: './shell.html',
   styleUrl: './shell.scss',

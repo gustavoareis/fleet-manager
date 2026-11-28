@@ -1,25 +1,15 @@
 .stats {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 16px;
   margin-bottom: 24px;
 }
 
+// Number tiles use the shared .stat look (styles.scss)
 .stat {
   display: flex;
   flex-direction: column;
-  padding: 16px;
-  border-radius: var(--mat-sys-corner-medium);
-  background: var(--mat-sys-primary-container);
-  color: var(--mat-sys-on-primary-container);
-}
-
-.stat-value {
-  font: var(--mat-sys-display-small);
-}
-
-.stat-label {
-  font: var(--mat-sys-body-medium);
+  padding: 22px 24px 28px;
 }
 
 mat-card-content {
@@ -34,12 +24,24 @@ mat-card-content {
   th,
   td {
     text-align: left;
-    padding: 10px 12px;
-    border-bottom: 1px solid var(--mat-sys-outline-variant);
+    padding: 14px 12px;
+    border-bottom: 1px solid var(--ma-line);
   }
 
   th {
     font: var(--mat-sys-title-small);
     color: var(--mat-sys-on-surface-variant);
+  }
+
+  tbody tr {
+    transition: background-color 200ms;
+
+    &:hover {
+      background: var(--ma-pulse-soft);
+    }
+  }
+
+  tbody tr:last-child td {
+    border-bottom: 0;
   }
 }

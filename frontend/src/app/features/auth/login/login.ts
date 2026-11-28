@@ -1,3 +1,5 @@
+import { ThemeToggle } from '../../../shared/ui/theme-toggle';
+import { AuthHero } from '../../../shared/ui/auth-hero';
 import { ChangeDetectionStrategy, Component, inject, input, isDevMode, signal } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -29,6 +31,8 @@ function safeReturnUrl(url: string | undefined): string | null {
     MatIconModule,
     MatInputModule,
     MatProgressSpinnerModule,
+    AuthHero,
+    ThemeToggle,
   ],
   templateUrl: './login.html',
   styleUrl: './login.scss',
