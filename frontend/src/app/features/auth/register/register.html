@@ -1,7 +1,10 @@
-<main class="auth-page" id="conteudo">
+<div class="auth-page">
+<app-auth-hero />
+<app-theme-toggle class="theme-corner" />
+<main class="auth-main" id="conteudo">
   <mat-card class="auth-card" appearance="outlined">
     <div class="brand" aria-hidden="true">
-      <mat-icon>medical_services</mat-icon>
+      <mat-icon>ecg_heart</mat-icon>
       <span>MedAgenda</span>
     </div>
     <h1>Criar conta de paciente</h1>
@@ -170,3 +173,4 @@
     <p class="alternate">Já tem conta? <a routerLink="/login">Entrar</a></p>
   </mat-card>
 </main>
+</div>

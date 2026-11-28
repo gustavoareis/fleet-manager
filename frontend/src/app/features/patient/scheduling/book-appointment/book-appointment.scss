@@ -1,10 +1,13 @@
 .wizard {
   overflow: hidden;
+  padding: 8px 8px 12px;
 }
 
 .step-title {
-  font: var(--mat-sys-title-medium);
-  margin: 8px 0 12px;
+  font-family: var(--ma-display);
+  font-size: 1.4rem;
+  font-weight: 400;
+  margin: 12px 0 14px;
 
   &::first-letter {
     text-transform: uppercase; // "segunda-feira, ..." from the date pipe
@@ -27,8 +30,8 @@ mat-selection-list {
 
 .calendar {
   max-width: 360px;
-  border: 1px solid var(--mat-sys-outline-variant);
-  border-radius: var(--mat-sys-corner-medium);
+  border-radius: var(--mat-sys-corner-large);
+  background: var(--mat-sys-surface-container-low);
 }
 
 mat-chip-listbox {

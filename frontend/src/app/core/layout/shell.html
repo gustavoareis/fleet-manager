@@ -1,16 +1,16 @@
 <!-- First focusable element: keyboard users can jump straight past the navigation -->
 <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
 
-<mat-toolbar class="toolbar" role="banner">
+<header class="rail" role="banner">
   <a class="brand" [routerLink]="auth.homeUrl()" aria-label="MedAgenda, página inicial">
-    <mat-icon aria-hidden="true">medical_services</mat-icon>
+    <span class="logo" aria-hidden="true"><mat-icon>ecg_heart</mat-icon></span>
     <span class="brand-name">MedAgenda</span>
   </a>
 
   <nav class="nav" aria-label="Navegação principal">
     @for (item of navItems(); track item.path) {
       <a
-        mat-button
+        class="nav-link"
         [routerLink]="item.path"
         routerLinkActive="active"
         [routerLinkActiveOptions]="{ exact: !!item.exact }"
@@ -22,16 +22,20 @@
     }
   </nav>
 
-  <span class="spacer"></span>
+  <app-theme-toggle class="theme" />
 
   <button
-    mat-button
+    type="button"
     class="user-button"
     [matMenuTriggerFor]="userMenu"
     [attr.aria-label]="'Menu do usuário ' + auth.user()?.displayName"
   >
-    <mat-icon aria-hidden="true">account_circle</mat-icon>
-    <span class="user-name">{{ auth.firstName() }}</span>
+    <span class="avatar" aria-hidden="true">{{ auth.firstName().charAt(0) }}</span>
+    <span class="user-text">
+      <span class="user-name">{{ auth.user()?.displayName }}</span>
+      <span class="user-role">{{ roleLabel() }}</span>
+    </span>
+    <mat-icon class="chevron" aria-hidden="true">unfold_more</mat-icon>
   </button>
 
   <mat-menu #userMenu="matMenu" xPosition="before">
@@ -44,7 +48,7 @@
       <span>Sair</span>
     </button>
   </mat-menu>
-</mat-toolbar>
+</header>
 
 <!-- tabindex=-1 lets the skip link move focus here -->
 <main id="conteudo" tabindex="-1">

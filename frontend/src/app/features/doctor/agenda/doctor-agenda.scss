@@ -23,8 +23,10 @@
 }
 
 .period {
-  font: var(--mat-sys-title-large);
-  margin: 16px 0 12px;
+  font-family: var(--ma-display);
+  font-size: 1.5rem;
+  font-weight: 400;
+  margin: 20px 0 14px;
 }
 
 // ---- counters ----------------------------------------------------------------------------
@@ -40,23 +42,7 @@
 .stat {
   display: flex;
   flex-direction: column;
-  padding: 12px 16px;
-  border-radius: var(--mat-sys-corner-medium);
-  background: var(--mat-sys-primary-container);
-  color: var(--mat-sys-on-primary-container);
-
-  &.muted {
-    background: var(--mat-sys-surface-container-high);
-    color: var(--mat-sys-on-surface-variant);
-  }
-
-  .value {
-    font: var(--mat-sys-headline-medium);
-  }
-
-  .label {
-    font: var(--mat-sys-label-large);
-  }
+  padding: 16px 18px 20px;
 }
 
 // ---- days and appointments ---------------------------------------------------------------
@@ -71,15 +57,15 @@
   font: var(--mat-sys-title-medium);
   margin: 0 0 8px;
   padding-bottom: 6px;
-  border-bottom: 1px solid var(--mat-sys-outline-variant);
+  border-bottom: 1px solid var(--ma-line);
 }
 
 .today-tag {
   padding: 2px 10px;
   border-radius: 999px;
   font: var(--mat-sys-label-medium);
-  background: var(--mat-sys-tertiary-container);
-  color: var(--mat-sys-on-tertiary-container);
+  background: var(--ma-pulse);
+  color: #05452d;
 }
 
 .list {
@@ -96,9 +82,17 @@
   gap: 16px;
   align-items: start;
   padding: 14px 16px;
-  border: 1px solid var(--mat-sys-outline-variant);
-  border-radius: var(--mat-sys-corner-medium);
-  background: var(--mat-sys-surface-container-lowest);
+  border-radius: var(--mat-sys-corner-large);
+  background: var(--ma-card);
+  box-shadow: var(--ma-shadow);
+  transition:
+    transform 300ms var(--ma-ease),
+    box-shadow 300ms var(--ma-ease);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--ma-shadow-lift);
+  }
 
   &.dim {
     opacity: 0.7;
@@ -123,7 +117,11 @@
 }
 
 .time {
-  font: var(--mat-sys-title-large);
+  font-family: var(--ma-display);
+  font-size: 1.6rem;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
   color: var(--mat-sys-primary);
 }
 
@@ -143,9 +141,9 @@
   gap: 6px;
   margin: 8px 0 0;
   padding: 8px 12px;
-  border-left: 3px solid var(--mat-sys-tertiary);
+  border-left: 3px solid var(--ma-pulse);
   border-radius: 0 var(--mat-sys-corner-small) var(--mat-sys-corner-small) 0;
-  background: var(--mat-sys-surface-container);
+  background: var(--ma-pulse-soft);
   font: var(--mat-sys-body-medium);
   white-space: pre-wrap;
 

@@ -19,6 +19,15 @@ mat-tab-group {
 }
 
 .item {
+  transition:
+    transform 300ms var(--ma-ease),
+    box-shadow 300ms var(--ma-ease);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--ma-shadow-lift);
+  }
+
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: center;
@@ -41,13 +50,16 @@ mat-tab-group {
   flex-direction: column;
   align-items: center;
   min-width: 56px;
-  padding: 8px;
+  padding: 10px 8px;
   border-radius: var(--mat-sys-corner-medium);
-  background: var(--mat-sys-primary-container);
-  color: var(--mat-sys-on-primary-container);
+  background: var(--ma-pulse-soft);
+  color: var(--ma-pulse-ink);
 
   .day {
-    font: var(--mat-sys-headline-small);
+    font-family: var(--ma-display);
+    font-size: 1.9rem;
+    font-weight: 300;
+    line-height: 1.1;
   }
 
   .month {

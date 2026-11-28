@@ -1,3 +1,5 @@
+import { ThemeToggle } from '../../../shared/ui/theme-toggle';
+import { AuthHero } from '../../../shared/ui/auth-hero';
 import { httpResource } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -36,6 +38,8 @@ import {
     MatIconModule,
     MatInputModule,
     MatProgressSpinnerModule,
+    AuthHero,
+    ThemeToggle,
     MatSelectModule,
   ],
   templateUrl: './register.html',

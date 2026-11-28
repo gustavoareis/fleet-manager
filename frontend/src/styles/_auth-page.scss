@@ -1,19 +1,34 @@
-// Shared layout of the public auth pages (login, sign-up): a centered card on a tinted background.
+// Shared layout of the public auth pages (login, sign-up): brand panel on the left (desktop),
+// the form card on the right.
 @mixin auth-page($card-width: 420px) {
   :host {
     display: block;
     min-height: 100%;
-    background: linear-gradient(
-      160deg,
-      var(--mat-sys-primary-container) 0%,
-      var(--mat-sys-surface) 55%
-    );
   }
 
   .auth-page {
     display: grid;
-    place-items: center;
     min-height: 100vh;
+    box-sizing: border-box;
+
+    @media (min-width: 960px) {
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+      gap: 16px;
+      padding: 16px;
+    }
+  }
+
+  // Theme switch floats in the top-right corner, over the form side
+  .theme-corner {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 5;
+  }
+
+  .auth-main {
+    display: grid;
+    place-items: center;
     padding: 24px 16px;
     box-sizing: border-box;
   }
@@ -21,33 +36,49 @@
   .auth-card {
     width: 100%;
     max-width: $card-width;
-    padding: 24px;
+    padding: 32px;
     box-sizing: border-box;
+    animation: ma-rise 700ms 150ms var(--ma-ease) both;
+
+    @media (max-width: 599px) {
+      padding: 24px 20px;
+    }
   }
 
+  // Shown only where the brand panel is hidden (phones, tablets)
   .brand {
     display: flex;
     align-items: center;
     gap: 8px;
     color: var(--mat-sys-primary);
-    font: var(--mat-sys-title-large);
-    margin-bottom: 8px;
+    font-family: var(--ma-display);
+    font-size: 1.35rem;
+    font-weight: 500;
+    margin-bottom: 20px;
 
     mat-icon {
-      font-size: 32px;
-      width: 32px;
-      height: 32px;
+      font-size: 30px;
+      width: 30px;
+      height: 30px;
+    }
+
+    @media (min-width: 960px) {
+      display: none;
     }
   }
 
   h1 {
-    font: var(--mat-sys-headline-small);
-    margin: 0 0 4px;
+    font-family: var(--ma-display);
+    font-size: 2.2rem;
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin: 0 0 6px;
   }
 
   .subtitle {
     color: var(--mat-sys-on-surface-variant);
-    margin: 0 0 24px;
+    margin: 0 0 28px;
   }
 
   form {
@@ -57,7 +88,13 @@
 
   .submit {
     margin-top: 8px;
-    height: 48px;
+    height: 52px;
+    font-size: 1rem;
+    transition: transform 200ms var(--ma-ease);
+
+    &:active:not(:disabled) {
+      transform: scale(0.98);
+    }
   }
 
   .alternate {

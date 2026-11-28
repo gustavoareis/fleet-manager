@@ -1,6 +1,6 @@
+// Mobile first: a floating top bar. From 960px up it becomes a left rail (like a clinic dashboard).
 :host {
-  display: flex;
-  flex-direction: column;
+  display: block;
   min-height: 100%;
 }
 
@@ -8,7 +8,7 @@
   position: absolute;
   left: 8px;
   top: -48px;
-  z-index: 10;
+  z-index: 20;
   padding: 8px 16px;
   border-radius: var(--mat-sys-corner-small);
   background: var(--mat-sys-primary);
@@ -19,44 +19,140 @@
   }
 }
 
-.toolbar {
+.rail {
   position: sticky;
-  top: 0;
+  top: 8px;
   z-index: 5;
+  display: flex;
+  align-items: center;
   gap: 8px;
-  background: var(--mat-sys-surface-container);
-  border-bottom: 1px solid var(--mat-sys-outline-variant);
+  margin: 8px;
+  padding: 8px 12px;
+  border-radius: 24px;
+  background: color-mix(in srgb, var(--ma-card) 88%, transparent);
+  backdrop-filter: blur(14px);
+  box-shadow: var(--ma-shadow);
 }
 
 .brand {
   display: flex;
   align-items: center;
-  gap: 8px;
-  color: var(--mat-sys-primary);
+  gap: 10px;
+  color: var(--ma-ink);
   text-decoration: none;
-  font: var(--mat-sys-title-large);
-  margin-right: 8px;
+  font-family: var(--ma-display);
+  font-size: 1.35rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.logo {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: var(--mat-sys-primary);
+  color: var(--mat-sys-on-primary);
+
+  mat-icon {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+  }
 }
 
 .nav {
   display: flex;
   gap: 4px;
+  margin-left: auto;
+}
 
-  .active {
-    background: var(--mat-sys-secondary-container);
-    color: var(--mat-sys-on-secondary-container);
+.theme {
+  --size: 40px;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  color: var(--mat-sys-on-surface-variant);
+  text-decoration: none;
+  font: var(--mat-sys-label-large);
+  font-size: 0.95rem;
+  transition:
+    background-color 200ms var(--ma-ease),
+    color 200ms var(--ma-ease);
+
+  mat-icon {
+    transition: transform 300ms var(--ma-ease);
+  }
+
+  &:hover {
+    background: var(--ma-pulse-soft);
+    color: var(--ma-ink);
+
+    mat-icon {
+      transform: scale(1.12);
+    }
+  }
+
+  &.active {
+    background: var(--ma-pulse-soft);
+    color: var(--ma-pulse-ink);
+    font-weight: 600;
+
+    mat-icon {
+      color: var(--mat-sys-primary);
+    }
   }
 }
 
-.spacer {
-  flex: 1;
+.user-button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ma-ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 200ms;
+
+  &:hover {
+    background: var(--mat-sys-surface-container);
+  }
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--ma-pulse);
+  color: #05452d;
+  font-family: var(--ma-display);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.user-text,
+.chevron {
+  display: none;
 }
 
 .menu-header {
   display: flex;
   flex-direction: column;
   padding: 8px 16px 12px;
-  border-bottom: 1px solid var(--mat-sys-outline-variant);
+  border-bottom: 1px solid var(--ma-line);
 
   span {
     font: var(--mat-sys-body-small);
@@ -65,25 +161,109 @@
 }
 
 main {
-  flex: 1;
-
   &:focus {
     outline: none; // focus target of the skip link; not interactive itself
   }
 }
 
-// Phones: icons only, labels stay available to screen readers via aria-label / sr text
-@media (max-width: 599px) {
-  .brand-name,
-  .user-name {
-    display: none;
-  }
+.brand-name,
+.nav-label {
+  display: none;
+}
 
+// Phones: icons only; the link keeps its name via the visually hidden label
+@media (max-width: 959px) {
   .nav-label {
+    display: block;
     position: absolute;
     width: 1px;
     height: 1px;
     overflow: hidden;
     clip: rect(0, 0, 0, 0);
+  }
+
+  .brand-name {
+    display: none;
+  }
+
+  @media (min-width: 600px) {
+    .brand-name {
+      display: block;
+    }
+  }
+}
+
+// Desktop: left rail
+@media (min-width: 960px) {
+  :host {
+    display: grid;
+    grid-template-columns: 264px minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .rail {
+    top: 16px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 24px;
+    height: calc(100vh - 32px);
+    margin: 16px 0 16px 16px;
+    padding: 20px 14px 14px;
+    border-radius: 28px;
+    box-sizing: border-box;
+    background: var(--ma-card);
+    backdrop-filter: none;
+  }
+
+  .brand {
+    padding: 0 6px;
+  }
+
+  .brand-name,
+  .nav-label {
+    display: block;
+  }
+
+  .nav {
+    flex-direction: column;
+    margin: 0;
+  }
+
+  .theme {
+    margin-top: auto;
+    align-self: flex-start;
+    margin-left: 6px;
+  }
+
+  .user-button {
+    margin-top: 0;
+    padding: 8px;
+    border-radius: 18px;
+    background: var(--mat-sys-surface-container-low);
+  }
+
+  .user-text {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+    line-height: 1.25;
+  }
+
+  .user-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 600;
+  }
+
+  .user-role {
+    font: var(--mat-sys-body-small);
+    color: var(--mat-sys-on-surface-variant);
+  }
+
+  .chevron {
+    display: block;
+    color: var(--mat-sys-on-surface-variant);
   }
 }
