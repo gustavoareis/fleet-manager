@@ -276,11 +276,9 @@ Resumo das escolhas que mais valem explicar:
 | 5 | Área do médico | Concluída |
 | 6 | Módulo JSP da recepção | Concluída |
 | 7 | Testes (unitários, integração e E2E) | Concluída |
-| 8 | Docker Compose, GitHub Actions e diagrama final | Pendente |
 
 ### Limitações conhecidas
 
 - O login do `/admin` é separado do login do Angular (não há SSO).
-- A primeira requisição a cada JSP é lenta, por causa da compilação sob demanda. A pré-compilação no build está prevista para a etapa 8.
-- O backend é empacotado como WAR executável (`java -jar`), exigência do Spring Boot para JSP. Não há suporte a deploy em contêiner de servlets externo.
-- Por enquanto, a execução é local, sem Docker nem pipeline de CI.
+- A primeira requisição a cada JSP é lenta, por causa da compilação sob demanda.- O backend é empacotado como WAR executável (`java -jar`), exigência do Spring Boot para JSP. Não há suporte a deploy em contêiner de servlets externo.
+- A execução é local, sem Docker nem pipeline de CI.
